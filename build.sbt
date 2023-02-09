@@ -6,7 +6,7 @@ ThisBuild / scalaVersion := "2.13.10"
 
 lazy val root = (project in file("."))
   .settings(
-    name := "scala-openai-client",
+    name := "typelevel-openai",
     scalacOptions := scalacOps
   )
 

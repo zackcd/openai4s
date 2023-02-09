@@ -3,7 +3,7 @@ package openai.model
 import cats.syntax.all._
 import cats.effect.{IO, Resource}
 import openai.Utilities.getHeaders
-import openai.{BaseUrl, HttpClient, OpenAiConfig}
+import openai.{BaseUrl, OpenAiConfig}
 import openai.model.domain.{GetModelsResponse, Model}
 import org.http4s.circe.CirceEntityCodec.circeEntityDecoder
 import org.http4s.{Method, Request, Uri}

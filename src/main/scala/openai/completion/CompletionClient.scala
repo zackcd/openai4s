@@ -23,7 +23,7 @@ sealed trait CompletionClient {
 
 object CompletionClient {
 
-  def apply(config: OpenAiConfig, httpClient: Client[IO]): CompletionClient =
+  def apply(config: OpenAiConfig): CompletionClient =
     new CompletionClient {
 
       private val httpClient: Resource[IO, Client[IO]] =
