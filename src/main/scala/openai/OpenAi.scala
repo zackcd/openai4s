@@ -1,32 +1,33 @@
 package openai
 
 import openai.completion.CompletionClient
+import openai.edit.EditClient
+import openai.embedding.EmbeddingClient
+import openai.image.ImageClient
+import openai.model.ModelClient
+import openai.tuning.TuningClient
 
-import java.net.URI
-import java.net.http.HttpResponse.BodyHandlers
-import java.net.http.{HttpClient, HttpRequest}
+import scala.concurrent.ExecutionContext
 
-sealed trait OpenAi {
+case class OpenAi(config: OpenAiConfig)(implicit ec: ExecutionContext) {
 
-  val completion: CompletionClient
+//  val completion: CompletionClient = CompletionClient(config)
+//
+//  val edit: EditClient = ???
+//
+//  val embedding: EmbeddingClient = ???
+//
+//  val image: ImageClient = ???
+
+  val model: ModelClient = ModelClient(config)
+
+//  val tuning: TuningClient = ???
 
 }
 
 object OpenAi {
 
-  def apply(config: OpenAiConfig): OpenAi = new OpenAi {
-
-    val completion: CompletionClient = CompletionClient(config)
-
-  }
-
-  val client: HttpClient = HttpClient.newBuilder().build()
-
-  val request: HttpRequest = HttpRequest
-    .newBuilder()
-    .uri(URI.create("http://openjdk.org/"))
-    .build()
-
-  val res = client.send(request, BodyHandlers.ofString())
+  def apply(config: OpenAiConfig)(implicit ec: ExecutionContext): OpenAi =
+    new OpenAi(config) {}
 
 }

@@ -1,55 +1,40 @@
 package openai.model
 
-import cats.syntax.all._
-import cats.effect.{IO, Resource}
-import openai.Utilities.getHeaders
 import openai.{BaseUrl, OpenAiConfig}
 import openai.model.domain.{GetModelsResponse, Model}
-import org.http4s.circe.CirceEntityCodec.circeEntityDecoder
-import org.http4s.{Method, Request, Uri}
-import org.http4s.client.Client
-import org.http4s.ember.client.EmberClientBuilder
+import openai.Utilities.getHeaders
+import openai.http.{OpenAiHttpClient, RequestMethod}
 
-sealed trait ModelClient extends HttpClient {
+import scala.concurrent.{ExecutionContext, Future}
 
-  def getAll: IO[GetModelsResponse]
+sealed trait ModelClient {
 
-  def getById(modelId: String): IO[Model]
+  val ResourcePath = "/v1/models"
+
+  def getAll: Future[GetModelsResponse]
+
+  def getById(modelId: String): Future[Model]
 }
 
-object ModelClient {
-  def apply(config: OpenAiConfig): ModelClient = new ModelClient {
+object ModelClient extends OpenAiHttpClient {
+  def apply(
+      config: OpenAiConfig
+  )(implicit ec: ExecutionContext): ModelClient =
+    new ModelClient {
 
-    private val httpClient: Resource[IO, Client[IO]] =
-      EmberClientBuilder
-        .default[IO]
-        .build
+      def getAll: Future[GetModelsResponse] =
+        executeRequest[GetModelsResponse](
+          BaseUrl + ResourcePath,
+          RequestMethod.Get,
+          getHeaders(config)
+        )
 
-    def getAll: IO[GetModelsResponse] =
-      Uri
-        .fromString(BaseUrl + "/v1/models")
-        .liftTo[IO]
-        .flatMap { uri =>
-          val req =
-            Request[IO](Method.GET, uri)
-              .withHeaders(
-                getHeaders(config)
-              )
-          httpClient.use(_.expect[GetModelsResponse](req))
-        }
+      def getById(modelId: String): Future[Model] =
+        executeRequest[Model](
+          BaseUrl + ResourcePath + s"/$modelId",
+          RequestMethod.Get,
+          getHeaders(config)
+        )
 
-    def getById(modelId: String): IO[Model] =
-      Uri
-        .fromString(BaseUrl + "/v1/models/" + modelId)
-        .liftTo[IO]
-        .flatMap { uri =>
-          val req =
-            Request[IO](Method.GET, uri)
-              .withHeaders(
-                getHeaders(config)
-              )
-          httpClient.use(_.expect[Model](req))
-        }
-
-  }
+    }
 }

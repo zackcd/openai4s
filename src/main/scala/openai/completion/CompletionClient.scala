@@ -1,51 +1,39 @@
 package openai.completion
 
-import cats.effect.{IO, Resource}
-import cats.effect.unsafe.implicits.global
 import cats.syntax.all._
-import io.circe.syntax.EncoderOps
 import openai.Utilities.getHeaders
 import openai.{BaseUrl, OpenAiConfig}
 import openai.completion.domain._
-import org.http4s.circe.CirceEntityCodec._
-import org.http4s.{Header, Method, Request, Uri}
-import org.http4s.client.Client
-import org.http4s.ember.client.EmberClientBuilder
-import org.typelevel.ci.CIStringSyntax
+import openai.http.{OpenAiHttpClient, RequestMethod}
+
+import scala.concurrent.{ExecutionContext, Future}
 
 sealed trait CompletionClient {
 
+  val ResourcePath = "/v1/completions"
+
   def ask(
       request: CreateCompletionRequest
-  ): IO[CreateCompletionResponse]
+  ): Future[CreateCompletionResponse]
 
 }
 
-object CompletionClient {
+object CompletionClient extends OpenAiHttpClient {
 
-  def apply(config: OpenAiConfig): CompletionClient =
+  def apply(
+      config: OpenAiConfig
+  )(implicit ec: ExecutionContext): CompletionClient =
     new CompletionClient {
-
-      private val httpClient: Resource[IO, Client[IO]] =
-        EmberClientBuilder
-          .default[IO]
-          .build
 
       def ask(
           request: CreateCompletionRequest
-      ): IO[CreateCompletionResponse] =
-        Uri
-          .fromString(BaseUrl + "/v1/completions")
-          .liftTo[IO]
-          .flatMap { uri =>
-            val req =
-              Request[IO](Method.POST, uri)
-                .withEntity(request.asJson.deepDropNullValues)
-                .withHeaders(
-                  getHeaders(config)
-                )
-            httpClient.use(_.expect[CreateCompletionResponse](req))
-          }
+      ): Future[CreateCompletionResponse] =
+        executeRequest[CreateCompletionResponse](
+          BaseUrl + ResourcePath,
+          RequestMethod.Post,
+          getHeaders(config),
+          request.some
+        )
 
     }
 
