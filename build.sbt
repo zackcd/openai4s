@@ -10,13 +10,6 @@ lazy val root = (project in file("."))
     scalacOptions := scalacOps
   )
 
-libraryDependencies ++= Seq(
-  "org.typelevel" %% "cats-core" % "2.9.0",
-  "org.typelevel" %% "cats-effect" % "3.4.6",
-  "org.http4s" %% "http4s-ember-client" % "0.23.18",
-  "org.http4s" %% "http4s-circe" % "0.23.18"
-)
-
 val circeVersion = "0.15.0-M1"
 
 libraryDependencies ++= Seq(
@@ -25,7 +18,9 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser"
 ).map(_ % circeVersion)
 
+libraryDependencies ++= Seq(
+  "io.circe" %% "circe-derivation" % "0.13.0-M5"
+)
 
-libraryDependencies += "io.circe" %% "circe-derivation" % "0.13.0-M5"
+libraryDependencies += "org.scalameta" %% "munit" % "0.7.29" % Test
 
-libraryDependencies += "org.typelevel" %% "munit-cats-effect-3" % "1.0.7"

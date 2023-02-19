@@ -1,8 +1,16 @@
 package openai
 
+import java.net.http.HttpClient
+
 trait TestConfig {
 
-  val config =
-    OpenAiConfig(apiKey = "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", organization = None)
+  val config: OpenAiConfig =
+    OpenAiConfig(
+      apiKey = sys.env("OPENAI_API_KEY"),
+      organization = None,
+      mode = "sync"
+    )
+
+  val httpClient: HttpClient = HttpClient.newBuilder().build()
 
 }

@@ -2,6 +2,7 @@ package openai.completion.domain
 
 import io.circe.{Encoder, derivation}
 import io.circe.derivation.deriveEncoder
+import openai.OpenAiRequest
 
 case class CreateCompletionRequest(
     model: String,
@@ -20,7 +21,7 @@ case class CreateCompletionRequest(
     bestOf: Option[Int] = None,
     logitBias: Option[Map[String, Double]] = None,
     user: Option[String] = None
-) {
+) extends OpenAiRequest {
   require(
     logprobs.fold(true)(lp => lp <= 5),
     "The maximum value for logprobs is 5"

@@ -1,9 +1,11 @@
 package openai.model
 
-import munit.CatsEffectSuite
+import munit.FunSuite
 import openai.TestConfig
 
-class ModelTest extends CatsEffectSuite with TestConfig {
+import scala.concurrent.ExecutionContext.Implicits.global
+
+class ModelTest extends FunSuite with TestConfig {
 
   test("get models") {
     ModelClient(config).getAll.map(println)
