@@ -7,7 +7,6 @@ import openai.domain.OpenAiRequest
 import java.io.File
 
 final case class CreateImageVariationRequest(
-    image: File,
     n: Option[Int] = None,
     size: Option[ImageSize] = None,
     responseFormat: Option[ImageResponseFormat] = None,

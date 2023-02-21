@@ -7,6 +7,7 @@ import openai.http.{OpenAiHttpClient, RequestMethod}
 import openai.http.OpenAiHttpClient.executeRequest
 import openai.module.image.domain._
 
+import java.io.File
 import scala.concurrent.{ExecutionContext, Future}
 
 sealed trait ImageClient extends OpenAiClient {
@@ -16,10 +17,12 @@ sealed trait ImageClient extends OpenAiClient {
   def create(request: CreateImageRequest): Future[Image]
 
   def createEdit(
+      image: File,
       request: CreateImageEditRequest
   ): Future[Image]
 
   def createVariation(
+      image: File,
       request: CreateImageVariationRequest
   ): Future[Image]
 
@@ -41,6 +44,7 @@ object ImageClient {
         )
 
       def createEdit(
+          image: File,
           request: CreateImageEditRequest
       ): Future[Image] =
         executeRequest[Image](client)(
@@ -51,6 +55,7 @@ object ImageClient {
         )
 
       def createVariation(
+          image: File,
           request: CreateImageVariationRequest
       ): Future[Image] =
         executeRequest[Image](client)(

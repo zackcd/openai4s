@@ -7,7 +7,6 @@ import openai.domain.OpenAiRequest
 import java.io.File
 
 final case class CreateImageEditRequest(
-    image: File,
     mask: Option[String],
     prompt: String,
     n: Option[Int] = None,

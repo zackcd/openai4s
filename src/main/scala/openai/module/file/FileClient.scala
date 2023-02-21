@@ -4,8 +4,14 @@ import openai.Utilities.getHeaders
 import openai.http.{OpenAiHttpClient, RequestMethod}
 import openai.http.OpenAiHttpClient.executeRequest
 import openai.{BaseUrl, OpenAiClient, OpenAiConfig}
-import openai.module.file.domain.{DeleteFileResponse, FileData, GetFilesResponse}
+import openai.module.file.domain.{
+  DeleteFileResponse,
+  FileData,
+  GetFilesResponse,
+  UploadFileRequest
+}
 
+import java.io.File
 import scala.concurrent.{ExecutionContext, Future}
 
 trait FileClient extends OpenAiClient {
@@ -14,7 +20,7 @@ trait FileClient extends OpenAiClient {
 
   def list(): Future[GetFilesResponse]
 
-  def upload(): Future[FileData]
+  def upload(file: File, request: UploadFileRequest): Future[FileData]
 
   def delete(fileId: String): Future[DeleteFileResponse]
 
@@ -38,7 +44,7 @@ object FileClient {
           getHeaders(config)
         )
 
-      def upload(): Future[FileData] =
+      def upload(file: File, request: UploadFileRequest): Future[FileData] =
         executeRequest[FileData](client)(
           BaseUrl + ResourcePath,
           RequestMethod.Get,
