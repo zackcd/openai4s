@@ -3,20 +3,24 @@ package openai.http
 import io.circe.{Decoder, Encoder}
 import io.circe.syntax.EncoderOps
 import io.circe.parser.decode
-import openai.error.OpenAiApiError
+import openai.module.domain.error.OpenAiApiError
 import cats.syntax.all._
-import openai.OpenAiRequest
+import openai.domain.OpenAiRequest
 
 import java.net.http.HttpRequest.BodyPublishers
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
-import scala.jdk.FutureConverters._
 import scala.concurrent.{ExecutionContext, Future}
+import scala.jdk.FutureConverters.CompletionStageOps
 
-trait OpenAiHttpClient {
+sealed trait OpenAiHttpClient
 
-  private val httpClient: HttpClient = HttpClient.newBuilder().build()
+object OpenAiHttpClient {
 
-  def executeRequest[R](
+  final case class DefaultHttpClient(
+      client: HttpClient = HttpClient.newHttpClient()
+  ) extends OpenAiHttpClient
+
+  def executeRequest[R](httpClient: OpenAiHttpClient)(
       url: String,
       method: RequestMethod,
       headers: Map[String, String],
@@ -35,7 +39,20 @@ trait OpenAiHttpClient {
 
     val request = buildRequest(method, requestBuilder, requestBody)
 
-    httpClient
+    httpClient match {
+      case client: DefaultHttpClient =>
+        executeDefaultClientRequest(client, request)
+    }
+  }
+
+  private def executeDefaultClientRequest[R](
+      client: DefaultHttpClient,
+      request: HttpRequest
+  )(implicit
+      ec: ExecutionContext,
+      decoder: Decoder[R]
+  ): Future[R] =
+    client.client
       .sendAsync(request, HttpResponse.BodyHandlers.ofString())
       .asScala
       .flatMap { res =>
@@ -48,7 +65,6 @@ trait OpenAiHttpClient {
             )
         }.toTry)
       }
-  }
 
   private def buildRequest[T](
       method: RequestMethod,
@@ -58,9 +74,13 @@ trait OpenAiHttpClient {
     method match {
       case RequestMethod.Get => request.GET()
       case RequestMethod.Post =>
-        request.POST(BodyPublishers.ofString(body.get.asJson.deepDropNullValues.noSpaces))
+        request.POST(
+          BodyPublishers.ofString(body.get.asJson.deepDropNullValues.noSpaces)
+        )
       case RequestMethod.Put =>
-        request.PUT(BodyPublishers.ofString(body.get.asJson.deepDropNullValues.noSpaces))
+        request.PUT(
+          BodyPublishers.ofString(body.get.asJson.deepDropNullValues.noSpaces)
+        )
       case RequestMethod.Delete => request.DELETE()
     }
   }.build()

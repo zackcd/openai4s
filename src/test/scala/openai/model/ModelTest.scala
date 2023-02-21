@@ -1,19 +1,19 @@
 package openai.model
 
 import munit.FunSuite
-import openai.TestConfig
+import openai.TestClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class ModelTest extends FunSuite with TestConfig {
+class ModelTest extends FunSuite with TestClient {
 
   test("get models") {
-    ModelClient(config).getAll.map(println)
+    testClient.model.getAll.map(println)
   }
 
   test("get model") {
     val modelId = "text-davinci-003"
-    ModelClient(config).getById(modelId).map(println)
+    testClient.model.getById(modelId).map(println)
   }
 
 }
