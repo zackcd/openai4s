@@ -1,8 +1,10 @@
 package openai.module.file
 
+import io.circe.syntax.EncoderOps
 import openai.Utilities.getHeaders
 import openai.http.{OpenAiHttpClient, RequestMethod}
-import openai.http.OpenAiHttpClient.executeRequest
+import openai.http.OpenAiHttpClient.{executeMultipartRequest, executeRequest}
+import openai.http.RequestPart.{FilePart, StringPart}
 import openai.{BaseUrl, OpenAiClient, OpenAiConfig}
 import openai.module.file.domain.{
   DeleteFileResponse,
@@ -45,10 +47,14 @@ object FileClient {
         )
 
       def upload(file: File, request: UploadFileRequest): Future[FileData] =
-        executeRequest[FileData](client)(
+        executeMultipartRequest[FileData](client)(
           BaseUrl + ResourcePath,
           RequestMethod.Get,
-          getHeaders(config)
+          getHeaders(config),
+          Map(
+            "purpose" -> StringPart(request.purpose),
+            "file" -> FilePart(file)
+          )
         )
 
       def delete(fileId: String): Future[DeleteFileResponse] =

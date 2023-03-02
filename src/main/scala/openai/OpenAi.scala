@@ -22,13 +22,13 @@ final case class OpenAi(config: OpenAiConfig)(implicit ec: ExecutionContext) {
 
   lazy val embedding: EmbeddingClient = EmbeddingClient(config, httpClient)
 
+  lazy val file: FileClient = FileClient(config, httpClient)
+
   lazy val image: ImageClient = ImageClient(config, httpClient)
 
   lazy val model: ModelClient = ModelClient(config, httpClient)
 
   lazy val tuning: TuningClient = TuningClient(config, httpClient)
-
-  lazy val file: FileClient = ???
 
 }
 
