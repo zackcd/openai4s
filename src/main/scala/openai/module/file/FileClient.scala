@@ -1,6 +1,5 @@
 package openai.module.file
 
-import io.circe.syntax.EncoderOps
 import openai.Utilities.getHeaders
 import openai.http.{OpenAiHttpClient, RequestMethod}
 import openai.http.OpenAiHttpClient.{executeMultipartRequest, executeRequest}
@@ -9,26 +8,53 @@ import openai.{BaseUrl, OpenAiClient, OpenAiConfig}
 import openai.module.file.domain.{
   DeleteFileResponse,
   FileData,
+  GetFileContentResponse,
   GetFilesResponse,
   UploadFileRequest
 }
 
-import java.io.File
 import scala.concurrent.{ExecutionContext, Future}
 
-trait FileClient extends OpenAiClient {
+sealed trait FileClient extends OpenAiClient {
 
   val ResourcePath = "/v1/files"
 
   def list(): Future[GetFilesResponse]
 
-  def upload(file: File, request: UploadFileRequest): Future[FileData]
+  /** Upload a file that contains document(s) to be used across various
+    * endpoints/features. Currently, the size of all the files uploaded by one
+    * organization can be up to 1 GB. Please contact us if you need to increase
+    * the storage limit.
+    * @param request
+    *   The data to use for this request
+    * @return
+    *   The uploaded file's metadata
+    */
+  def upload(request: UploadFileRequest): Future[FileData]
 
+  /** Delete a file.
+    * @param fileId
+    *   The ID of the file to use for this request
+    * @return
+    *   The deleted file's metadata
+    */
   def delete(fileId: String): Future[DeleteFileResponse]
 
+  /** Returns information about a specific file.
+    * @param fileId
+    *   The ID of the file to use for this request
+    * @return
+    *   A file's metadata
+    */
   def retrieve(fileId: String): Future[FileData]
 
-  def retrieveContent(fileId: String): Future[Unit]
+  /** Returns the contents of the specified file
+    * @param fileId
+    *   The ID of the file to use for this request
+    * @return
+    *   A file
+    */
+  def retrieveContent(fileId: String): Future[GetFileContentResponse]
 
 }
 
@@ -37,7 +63,10 @@ object FileClient {
   def apply(config: OpenAiConfig, client: OpenAiHttpClient)(implicit
       ec: ExecutionContext
   ): FileClient =
-    new FileClient() {
+    new FileClient {
+
+      private val PurposeMultipartKey = "purpose"
+      private val FileMultipartKey = "file"
 
       def list(): Future[GetFilesResponse] =
         executeRequest[GetFilesResponse](client)(
@@ -46,14 +75,14 @@ object FileClient {
           getHeaders(config)
         )
 
-      def upload(file: File, request: UploadFileRequest): Future[FileData] =
+      def upload(request: UploadFileRequest): Future[FileData] =
         executeMultipartRequest[FileData](client)(
           BaseUrl + ResourcePath,
-          RequestMethod.Get,
+          RequestMethod.Post,
           getHeaders(config),
           Map(
-            "purpose" -> StringPart(request.purpose),
-            "file" -> FilePart(file)
+            PurposeMultipartKey -> StringPart(request.purpose),
+            FileMultipartKey -> FilePart(request.file)
           )
         )
 
@@ -71,8 +100,8 @@ object FileClient {
           getHeaders(config)
         )
 
-      def retrieveContent(fileId: String): Future[Unit] =
-        executeRequest[Unit](client)(
+      def retrieveContent(fileId: String): Future[GetFileContentResponse] =
+        executeRequest[GetFileContentResponse](client)(
           BaseUrl + ResourcePath + s"/$fileId/content",
           RequestMethod.Get,
           getHeaders(config)

@@ -20,23 +20,23 @@ sealed trait ImageData
 object ImageData {
   implicit val decodeEvent: Decoder[ImageData] =
     List[Decoder[ImageData]](
-      Decoder[CreateImageUrlData].widen,
-      Decoder[CreateImageJsonData].widen
+      Decoder[UrlImageData].widen,
+      Decoder[JsonImageData].widen
     ).reduceLeft(_ or _)
 }
 
-final case class CreateImageUrlData(url: String) extends ImageData
+final case class UrlImageData(url: String) extends ImageData
 
-object CreateImageUrlData {
-  implicit val decoder: Decoder[CreateImageUrlData] = deriveDecoder(
+object UrlImageData {
+  implicit val decoder: Decoder[UrlImageData] = deriveDecoder(
     derivation.renaming.snakeCase
   )
 }
 
-final case class CreateImageJsonData(b64Json: String) extends ImageData
+final case class JsonImageData(b64Json: String) extends ImageData
 
-object CreateImageJsonData {
-  implicit val decoder: Decoder[CreateImageJsonData] = deriveDecoder(
+object JsonImageData {
+  implicit val decoder: Decoder[JsonImageData] = deriveDecoder(
     derivation.renaming.snakeCase
   )
 }

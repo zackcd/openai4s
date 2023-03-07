@@ -3,7 +3,6 @@ package openai.module.image.domain
 import io.circe.Encoder
 
 sealed trait ImageSize {
-
   def value: String
 }
 

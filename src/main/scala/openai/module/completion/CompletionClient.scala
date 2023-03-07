@@ -13,6 +13,12 @@ sealed trait CompletionClient extends OpenAiClient {
 
   val ResourcePath = "/v1/completions"
 
+  /** Creates a completion for the provided prompt and parameters
+    * @param request
+    *   The data to use for this request
+    * @return
+    *   The completion and its metadata
+    */
   def ask(
       request: CreateCompletionRequest
   ): Future[Completion]

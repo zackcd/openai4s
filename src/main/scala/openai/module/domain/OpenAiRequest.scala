@@ -6,6 +6,7 @@ import openai.module.image.domain._
 import openai.module.completion.domain.CreateCompletionRequest
 import openai.module.edit.domain.CreateEditRequest
 import openai.module.embedding.domain.CreateEmbeddingRequest
+import openai.module.moderation.domain.CreateModerationRequest
 
 trait OpenAiRequest
 
@@ -18,5 +19,6 @@ object OpenAiRequest {
     case r: CreateImageRequest          => r.asJson
     case r: CreateImageEditRequest      => r.asJson
     case r: CreateImageVariationRequest => r.asJson
+    case r: CreateModerationRequest     => r.asJson
   }
 }

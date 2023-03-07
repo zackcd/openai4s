@@ -9,11 +9,21 @@ final case class FileData(
     bytes: Int,
     createdAt: Long,
     filename: String,
-    purpose: String
+    purpose: String,
+    status: Option[String],
+    statusDetails: Option[StatusDetails]
 )
 
 object FileData {
   implicit val decoder: Decoder[FileData] = deriveDecoder(
+    derivation.renaming.snakeCase
+  )
+}
+
+case class StatusDetails()
+
+object StatusDetails {
+  implicit val decoder: Decoder[StatusDetails] = deriveDecoder(
     derivation.renaming.snakeCase
   )
 }

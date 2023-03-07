@@ -8,6 +8,7 @@ import openai.module.edit.EditClient
 import openai.module.embedding.EmbeddingClient
 import openai.module.file.FileClient
 import openai.module.model.ModelClient
+import openai.module.moderation.ModerationClient
 import openai.module.tuning.TuningClient
 
 import scala.concurrent.ExecutionContext
@@ -15,6 +16,10 @@ import scala.concurrent.ExecutionContext
 final case class OpenAi(config: OpenAiConfig)(implicit ec: ExecutionContext) {
 
   private val httpClient: OpenAiHttpClient = DefaultHttpClient()
+
+  lazy val audio = ???
+
+  lazy val chat = ???
 
   lazy val completion: CompletionClient = CompletionClient(config, httpClient)
 
@@ -27,6 +32,8 @@ final case class OpenAi(config: OpenAiConfig)(implicit ec: ExecutionContext) {
   lazy val image: ImageClient = ImageClient(config, httpClient)
 
   lazy val model: ModelClient = ModelClient(config, httpClient)
+
+  lazy val moderation: ModerationClient = ModerationClient(config, httpClient)
 
   lazy val tuning: TuningClient = TuningClient(config, httpClient)
 

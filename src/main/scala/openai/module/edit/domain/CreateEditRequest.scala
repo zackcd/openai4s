@@ -4,6 +4,9 @@ import io.circe.{Encoder, derivation}
 import io.circe.derivation.deriveEncoder
 import openai.domain.OpenAiRequest
 
+/**
+ * @see https://platform.openai.com/docs/api-reference/edits/create
+ */
 final case class CreateEditRequest(
     model: String,
     input: Option[String],

@@ -13,6 +13,12 @@ sealed trait EditClient extends OpenAiClient {
 
   val ResourcePath = "/v1/edits"
 
+  /** Creates a new edit for the provided input, instruction, and parameters.
+    * @param request
+    *   The data to use for this request
+    * @return
+    *   The edit and its metadata
+    */
   def create(request: CreateEditRequest): Future[Edit]
 
 }

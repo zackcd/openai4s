@@ -8,6 +8,7 @@ import cats.syntax.all._
 import openai.domain.OpenAiRequest
 import sttp.capabilities
 import sttp.client3._
+import sttp.model.MediaType
 
 import java.net.http.HttpClient
 import scala.concurrent.{ExecutionContext, Future}
@@ -49,6 +50,8 @@ object OpenAiHttpClient {
   ): Future[R] = {
     val request = buildMultipartRequest(url, method, headers, requestParts)
 
+    println(request)
+
     httpClient match {
       case client: DefaultHttpClient =>
         executeDefaultClientRequest(client, request)
@@ -82,6 +85,7 @@ object OpenAiHttpClient {
       case Some(b) =>
         basicRequest
           .body(b.asJson.deepDropNullValues.noSpaces)
+          .contentType(MediaType.ApplicationJson)
       case None => basicRequest
     }).headers(headers)
       .response(
@@ -104,14 +108,14 @@ object OpenAiHttpClient {
   ): Request[String, Any] = {
     val parts = requestParts.map { case (key, value) =>
       value match {
-        case RequestPart.FilePart(p) => multipartFile(key, p)
-        case RequestPart.StringPart(p) =>
-          multipart(key, p.asJson.deepDropNullValues.noSpaces)
+        case RequestPart.FilePart(p)   => multipartFile(key, p)
+        case RequestPart.StringPart(p) => multipart(key, p)
       }
     }.toList
 
     val request = basicRequest
       .multipartBody(parts)
+      .contentType(MediaType.MultipartFormData)
       .headers(headers)
       .response(
         asString.getRight
