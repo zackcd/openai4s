@@ -9,11 +9,18 @@ import openai.http.{OpenAiHttpClient, RequestMethod}
 
 import scala.concurrent.{ExecutionContext, Future}
 
+/** Given a prompt, the model will return one or more predicted completions, and
+  * can also return the probabilities of alternative tokens at each position.
+  * @see
+  *   https://platform.openai.com/docs/api-reference/completions
+  */
 sealed trait CompletionClient extends OpenAiClient {
 
   val ResourcePath = "/v1/completions"
 
   /** Creates a completion for the provided prompt and parameters
+    * @see
+    *   https://platform.openai.com/docs/api-reference/completions/create
     * @param request
     *   The data to use for this request
     * @return

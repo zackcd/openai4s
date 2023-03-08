@@ -2,29 +2,40 @@ package openai.module.file
 
 import openai.Utilities.getHeaders
 import openai.http.{OpenAiHttpClient, RequestMethod}
-import openai.http.OpenAiHttpClient.{executeMultipartRequest, executeRequest}
+import openai.http.OpenAiHttpClient.{
+  executeFactoryRequest,
+  executeMultipartRequest,
+  executeRequest
+}
 import openai.http.RequestPart.{FilePart, StringPart}
 import openai.{BaseUrl, OpenAiClient, OpenAiConfig}
-import openai.module.file.domain.{
-  DeleteFileResponse,
-  FileData,
-  GetFileContentResponse,
-  GetFilesResponse,
-  UploadFileRequest
-}
+import openai.module.file.domain._
 
 import scala.concurrent.{ExecutionContext, Future}
 
+/** Files are used to upload documents that can be used with features like
+  * Fine-tuning.
+  * @see
+  *   https://platform.openai.com/docs/api-reference/files
+  */
 sealed trait FileClient extends OpenAiClient {
 
   val ResourcePath = "/v1/files"
 
+  /** Returns a list of files that belong to the user's organization.
+    * @see
+    *   https://platform.openai.com/docs/api-reference/files/list
+    * @return
+    *   A list of files and their metadata
+    */
   def list(): Future[GetFilesResponse]
 
   /** Upload a file that contains document(s) to be used across various
     * endpoints/features. Currently, the size of all the files uploaded by one
     * organization can be up to 1 GB. Please contact us if you need to increase
     * the storage limit.
+    * @see
+    *   https://platform.openai.com/docs/api-reference/files/upload
     * @param request
     *   The data to use for this request
     * @return
@@ -33,6 +44,8 @@ sealed trait FileClient extends OpenAiClient {
   def upload(request: UploadFileRequest): Future[FileData]
 
   /** Delete a file.
+    * @see
+    *   https://platform.openai.com/docs/api-reference/files/delete
     * @param fileId
     *   The ID of the file to use for this request
     * @return
@@ -41,6 +54,8 @@ sealed trait FileClient extends OpenAiClient {
   def delete(fileId: String): Future[DeleteFileResponse]
 
   /** Returns information about a specific file.
+    * @see
+    *   https://platform.openai.com/docs/api-reference/files/retrieve
     * @param fileId
     *   The ID of the file to use for this request
     * @return
@@ -48,7 +63,9 @@ sealed trait FileClient extends OpenAiClient {
     */
   def retrieve(fileId: String): Future[FileData]
 
-  /** Returns the contents of the specified file
+  /** Returns the contents of the specified file.
+    * @see
+    *   https://platform.openai.com/docs/api-reference/files/retrieve-content
     * @param fileId
     *   The ID of the file to use for this request
     * @return
@@ -101,7 +118,7 @@ object FileClient {
         )
 
       def retrieveContent(fileId: String): Future[GetFileContentResponse] =
-        executeRequest[GetFileContentResponse](client)(
+        executeFactoryRequest[GetFileContentResponse](client)(
           BaseUrl + ResourcePath + s"/$fileId/content",
           RequestMethod.Get,
           getHeaders(config)

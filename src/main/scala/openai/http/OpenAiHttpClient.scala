@@ -12,6 +12,7 @@ import sttp.model.MediaType
 
 import java.net.http.HttpClient
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 sealed trait OpenAiHttpClient
 
@@ -36,6 +37,23 @@ object OpenAiHttpClient {
     httpClient match {
       case client: DefaultHttpClient =>
         executeDefaultClientRequest(client, request)
+    }
+  }
+
+  def executeFactoryRequest[R](httpClient: OpenAiHttpClient)(
+      url: String,
+      method: RequestMethod,
+      headers: Map[String, String],
+      requestBody: Option[OpenAiRequest] = None
+  )(implicit
+      ec: ExecutionContext,
+      fac: String => R
+  ): Future[R] = {
+    val request = buildRequest(url, method, headers, requestBody)
+
+    httpClient match {
+      case client: DefaultHttpClient =>
+        executeFactoryDefaultClientRequest(client, request)
     }
   }
 
@@ -74,6 +92,23 @@ object OpenAiHttpClient {
     }
   }
 
+  private def executeFactoryDefaultClientRequest[R](
+      client: DefaultHttpClient,
+      request: Request[String, Any]
+  )(implicit
+      ec: ExecutionContext,
+      fac: String => R
+  ): Future[R] = {
+    client.backend.send(request).flatMap { res =>
+      (if (res.code.isSuccess)
+         Try { fac(res.body) }.toEither
+           .leftMap(e => OpenAiApiError(e.getMessage))
+       else
+         OpenAiApiError(s"Error executing request: ${res.body}").asLeft)
+        .liftTo[Future]
+    }
+  }
+
   private def buildRequest[T](
       url: String,
       method: RequestMethod,
@@ -92,13 +127,20 @@ object OpenAiHttpClient {
         asString.getRight
       )
 
+    addUrl(method, url, request)
+  }
+
+  private def addUrl(
+      method: RequestMethod,
+      url: String,
+      request: RequestT[Empty, String, Any]
+  ): Request[String, Any] =
     method match {
       case RequestMethod.Get    => request.get(uri"$url")
       case RequestMethod.Post   => request.post(uri"$url")
       case RequestMethod.Put    => request.put(uri"$url")
       case RequestMethod.Delete => request.delete(uri"$url")
     }
-  }
 
   private def buildMultipartRequest(
       url: String,
@@ -121,12 +163,7 @@ object OpenAiHttpClient {
         asString.getRight
       )
 
-    method match {
-      case RequestMethod.Get    => request.get(uri"$url")
-      case RequestMethod.Post   => request.post(uri"$url")
-      case RequestMethod.Put    => request.put(uri"$url")
-      case RequestMethod.Delete => request.delete(uri"$url")
-    }
+    addUrl(method, url, request)
   }
 
 }

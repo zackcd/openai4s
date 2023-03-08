@@ -9,11 +9,18 @@ import openai.http.OpenAiHttpClient.executeRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
+/** Given a prompt and an instruction, the model will return an edited version
+  * of the prompt.
+  * @see
+  *   https://platform.openai.com/docs/api-reference/edits
+  */
 sealed trait EditClient extends OpenAiClient {
 
   val ResourcePath = "/v1/edits"
 
   /** Creates a new edit for the provided input, instruction, and parameters.
+    * @see
+    *   https://platform.openai.com/docs/api-reference/edits/create
     * @param request
     *   The data to use for this request
     * @return
