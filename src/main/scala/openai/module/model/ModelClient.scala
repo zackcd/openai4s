@@ -25,7 +25,7 @@ sealed trait ModelClient {
     * @return
     *   The list of models.
     */
-  def listModels: Future[GetModelsResponse]
+  def list(): Future[GetModelsResponse]
 
   /** Retrieves a model instance, providing basic information about the model
     * such as the owner and permissioning.
@@ -36,7 +36,7 @@ sealed trait ModelClient {
     * @return
     *   The model
     */
-  def retrieveModel(modelId: String): Future[Model]
+  def retrieve(modelId: String): Future[Model]
 }
 
 object ModelClient {
@@ -46,14 +46,14 @@ object ModelClient {
   )(implicit ec: ExecutionContext): ModelClient =
     new ModelClient {
 
-      def listModels: Future[GetModelsResponse] =
+      def list(): Future[GetModelsResponse] =
         executeRequest[GetModelsResponse](client)(
           BaseUrl + ResourcePath,
           RequestMethod.Get,
           getHeaders(config)
         )
 
-      def retrieveModel(modelId: String): Future[Model] =
+      def retrieve(modelId: String): Future[Model] =
         executeRequest[Model](client)(
           BaseUrl + ResourcePath + s"/$modelId",
           RequestMethod.Get,
