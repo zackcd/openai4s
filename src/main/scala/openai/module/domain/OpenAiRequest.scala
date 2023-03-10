@@ -14,7 +14,6 @@ trait OpenAiRequest
 object OpenAiRequest {
   implicit val encoder: Encoder[OpenAiRequest] = Encoder.instance {
     case r: CreateCompletionRequest     => r.asJson
-    case r: CreateCompletionRequest     => r.asJson
     case r: CreateEditRequest           => r.asJson
     case r: CreateEmbeddingRequest      => r.asJson
     case r: CreateImageRequest          => r.asJson

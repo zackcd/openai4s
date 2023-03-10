@@ -150,6 +150,7 @@ object OpenAiHttpClient {
       value match {
         case RequestPart.FilePart(p)   => multipartFile(key, p)
         case RequestPart.StringPart(p) => multipart(key, p)
+        case RequestPart.DoublePart(p) => multipart(key, p.toString)
       }
     }.toList
 
