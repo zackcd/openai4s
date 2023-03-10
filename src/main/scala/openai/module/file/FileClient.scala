@@ -82,9 +82,6 @@ object FileClient {
   ): FileClient =
     new FileClient {
 
-      private val PurposeMultipartKey = "purpose"
-      private val FileMultipartKey = "file"
-
       def list(): Future[GetFilesResponse] =
         executeRequest[GetFilesResponse](client)(
           BaseUrl + ResourcePath,
@@ -97,10 +94,7 @@ object FileClient {
           BaseUrl + ResourcePath,
           RequestMethod.Post,
           getHeaders(config),
-          Map(
-            PurposeMultipartKey -> StringPart(request.purpose),
-            FileMultipartKey -> FilePart(request.file)
-          )
+          request.toMultipartMap
         )
 
       def delete(fileId: String): Future[DeleteFileResponse] =

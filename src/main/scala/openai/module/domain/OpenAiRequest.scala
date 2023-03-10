@@ -2,6 +2,7 @@ package openai.domain
 
 import io.circe.Encoder
 import io.circe.syntax.EncoderOps
+import openai.module.chat.domain.CreateChatCompletionRequest
 import openai.module.image.domain._
 import openai.module.completion.domain.CreateCompletionRequest
 import openai.module.edit.domain.CreateEditRequest
@@ -20,5 +21,6 @@ object OpenAiRequest {
     case r: CreateImageEditRequest      => r.asJson
     case r: CreateImageVariationRequest => r.asJson
     case r: CreateModerationRequest     => r.asJson
+    case r: CreateChatCompletionRequest => r.asJson
   }
 }

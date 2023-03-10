@@ -68,8 +68,6 @@ object OpenAiHttpClient {
   ): Future[R] = {
     val request = buildMultipartRequest(url, method, headers, requestParts)
 
-    println(request)
-
     httpClient match {
       case client: DefaultHttpClient =>
         executeDefaultClientRequest(client, request)

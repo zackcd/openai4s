@@ -1,6 +1,8 @@
 package openai.module.file.domain
 
 import openai.domain.OpenAiRequest
+import openai.http.RequestPart
+import openai.http.RequestPart.{FilePart, StringPart}
 
 import java.io.File
 
@@ -15,4 +17,10 @@ import java.io.File
 final case class UploadFileRequest(
     file: File,
     purpose: String
-) extends OpenAiRequest
+) extends OpenAiRequest {
+
+  def toMultipartMap: Map[String, RequestPart] = Map(
+    "file" -> FilePart(this.file),
+    "purpose" -> StringPart(this.purpose)
+  )
+}

@@ -26,7 +26,7 @@ sealed trait CompletionClient extends OpenAiClient {
     * @return
     *   The completion and its metadata
     */
-  def ask(
+  def create(
       request: CreateCompletionRequest
   ): Future[Completion]
 
@@ -40,7 +40,7 @@ object CompletionClient {
   )(implicit ec: ExecutionContext): CompletionClient =
     new CompletionClient {
 
-      def ask(
+      def create(
           request: CreateCompletionRequest
       ): Future[Completion] =
         executeRequest[Completion](client)(

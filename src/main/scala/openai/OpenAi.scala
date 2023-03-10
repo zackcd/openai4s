@@ -2,6 +2,7 @@ package openai
 
 import openai.http.OpenAiHttpClient.DefaultHttpClient
 import openai.http.OpenAiHttpClient
+import openai.module.audio.AudioClient
 import openai.module.image.ImageClient
 import openai.module.completion.CompletionClient
 import openai.module.edit.EditClient
@@ -17,7 +18,7 @@ final case class OpenAi(config: OpenAiConfig)(implicit ec: ExecutionContext) {
 
   private val httpClient: OpenAiHttpClient = DefaultHttpClient()
 
-  lazy val audio = ???
+  lazy val audio: AudioClient = AudioClient(config, httpClient)
 
   lazy val chat = ???
 
