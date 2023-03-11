@@ -29,7 +29,7 @@ sealed trait ChatClient {
     * @return
     *   The chat completion and its metadata
     */
-  def create(
+  def createCompletion(
       request: CreateChatCompletionRequest
   ): Future[CreateChatCompletionResponse]
 
@@ -43,7 +43,7 @@ object ChatClient {
   )(implicit ec: ExecutionContext): ChatClient =
     new ChatClient {
 
-      def create(
+      def createCompletion(
           request: CreateChatCompletionRequest
       ): Future[CreateChatCompletionResponse] =
         executeRequest[CreateChatCompletionResponse](client)(

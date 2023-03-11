@@ -1,4 +1,4 @@
-package openai.module.domain
+package openai.domain
 
 object error {
 

@@ -2,7 +2,7 @@ package openai.module.completion.domain
 
 import io.circe.derivation.deriveDecoder
 import io.circe.{Decoder, derivation}
-import openai.module.domain.Usage
+import openai.domain.Usage
 
 final case class Completion(
     id: String,

@@ -1,4 +1,4 @@
-package openai.module.domain
+package openai.domain
 
 import io.circe.{Decoder, derivation}
 import io.circe.derivation.deriveDecoder

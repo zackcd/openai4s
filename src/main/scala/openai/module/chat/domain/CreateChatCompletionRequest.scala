@@ -54,17 +54,25 @@ import openai.domain.OpenAiRequest
   */
 final case class CreateChatCompletionRequest(
     model: String,
-    messages: List[String],
-    temperature: Option[Double],
-    topP: Option[Double],
-    n: Option[Int],
-    stop: Option[List[String]],
-    maxTokens: Option[Int],
-    presencePenalty: Option[Double],
-    frequencyPenalty: Option[Double],
-    logitBias: Option[Map[String, Double]],
-    user: Option[String]
-) extends OpenAiRequest
+    messages: List[ChatMessage],
+    temperature: Option[Double] = None,
+    topP: Option[Double] = None,
+    n: Option[Int] = None,
+    stop: Option[List[String]] = None,
+    maxTokens: Option[Int] = None,
+    presencePenalty: Option[Double] = None,
+    frequencyPenalty: Option[Double] = None,
+    logitBias: Option[Map[String, Double]] = None,
+    user: Option[String] = None
+) extends OpenAiRequest {
+
+  require(
+    temperature.fold(true)(t => t >= 0 && t <= 2),
+    "temperature must be between 0 and 2, inclusive"
+  )
+
+
+}
 
 object CreateChatCompletionRequest {
   implicit val encoder: Encoder[CreateChatCompletionRequest] = deriveEncoder(

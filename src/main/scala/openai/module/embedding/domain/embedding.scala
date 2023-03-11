@@ -2,7 +2,7 @@ package openai.module.embedding.domain
 
 import io.circe.{Decoder, derivation}
 import io.circe.derivation.deriveDecoder
-import openai.module.domain.Usage
+import openai.domain.Usage
 
 final case class Embedding(
     `object`: String,

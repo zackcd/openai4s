@@ -3,9 +3,9 @@ package openai.http
 import io.circe.{Decoder, Encoder}
 import io.circe.syntax.EncoderOps
 import io.circe.parser.decode
-import openai.module.domain.error.OpenAiApiError
 import cats.syntax.all._
 import openai.domain.OpenAiRequest
+import openai.domain.error.OpenAiApiError
 import sttp.capabilities
 import sttp.client3._
 import sttp.model.MediaType
