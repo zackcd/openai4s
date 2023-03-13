@@ -8,7 +8,7 @@ language model and other AI-powered tools using Scala.
 To use this library, add the following dependency to your SBT build file:
 
 ```scala
-libraryDependencies += "com.openai" %% "openai-scala" % "0.1.0"
+libraryDependencies += "" %% "openai4s" % "0.1.0"
 ```
 
 ## Usage
@@ -22,8 +22,12 @@ Once you have a key, you can authenticate with your key:
 import com.openai.OpenAi
 import com.openai.models._
 
-// Replace YOUR_API_KEY with your actual API key
-val openai = new OpenAI("YOUR_API_KEY")
+// Either set the config explicitly
+val config = new OpenAiConfig(...)
+val openai = new OpenAi(config)
+
+// Or set your credentials via environment variable and create the client instance without any parameters.
+val openai = new OpenAi()
 ```
 
 You can then use the library to interact with the OpenAI API. For example, to generate text using the GPT-3 language
