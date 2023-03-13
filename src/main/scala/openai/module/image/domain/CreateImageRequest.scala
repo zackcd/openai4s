@@ -27,9 +27,7 @@ final case class CreateImageRequest(
     size: Option[ImageSize] = None,
     responseFormat: Option[ImageResponseFormat] = None,
     user: Option[String] = None
-) extends OpenAiRequest {
-  require(n.fold(true)(n => n >= 1 && n <= 10))
-}
+) extends OpenAiRequest
 
 object CreateImageRequest {
   implicit val encoder: Encoder[CreateImageRequest] = deriveEncoder(

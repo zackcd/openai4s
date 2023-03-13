@@ -89,17 +89,7 @@ final case class CreateFineTuneRequest(
     classificationPositiveClass: Option[String],
     classificationBetas: Option[List[Double]],
     suffix: Option[String]
-) extends OpenAiRequest {
-  require(
-    batchSize.fold(true)(bs => bs > 0 && bs <= 256),
-    "batchSize must be between 1 and 256"
-  )
-
-  require(
-    suffix.fold(true)(s => s.length <= 40),
-    "suffix may be a maximum of 40 characters"
-  )
-}
+) extends OpenAiRequest
 
 object CreateFineTuneRequest {
   implicit val encoder: Encoder[CreateFineTuneRequest] = deriveEncoder(

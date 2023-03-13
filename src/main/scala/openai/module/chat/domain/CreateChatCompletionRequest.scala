@@ -64,15 +64,7 @@ final case class CreateChatCompletionRequest(
     frequencyPenalty: Option[Double] = None,
     logitBias: Option[Map[String, Double]] = None,
     user: Option[String] = None
-) extends OpenAiRequest {
-
-  require(
-    temperature.fold(true)(t => t >= 0 && t <= 2),
-    "temperature must be between 0 and 2, inclusive"
-  )
-
-
-}
+) extends OpenAiRequest
 
 object CreateChatCompletionRequest {
   implicit val encoder: Encoder[CreateChatCompletionRequest] = deriveEncoder(

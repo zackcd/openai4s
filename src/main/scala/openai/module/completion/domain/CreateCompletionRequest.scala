@@ -102,27 +102,7 @@ final case class CreateCompletionRequest(
     bestOf: Option[Int] = None,
     logitBias: Option[Map[String, Double]] = None,
     user: Option[String] = None
-) extends OpenAiRequest {
-  require(
-    logprobs.fold(true)(lp => lp <= 5),
-    "The maximum value for logprobs is 5"
-  )
-
-  require(
-    presencePenalty.fold(true)(pp => pp > -2 && pp < 2),
-    "presencePenalty must be a number between -2.0 and 2.0"
-  )
-
-  require(
-    frequencyPenalty.fold(true)(fp => fp > -2 && fp < 2),
-    "frequencyPenalty must be a number between -2.0 and 2.0"
-  )
-
-  require(
-    logitBias.fold(true)(lb => lb.values.forall(v => v >= -100 && v <= 100)),
-    "logitBias values must be from -100 to 100"
-  )
-}
+) extends OpenAiRequest
 
 object CreateCompletionRequest {
   implicit val encoder: Encoder[CreateCompletionRequest] = deriveEncoder(

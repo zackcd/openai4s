@@ -35,18 +35,7 @@ final case class CreateEditRequest(
     n: Option[Int] = None,
     temperature: Option[Double] = None,
     topP: Option[Double] = None
-) extends OpenAiRequest {
-
-  private val validModels =
-    Set("text-davinci-edit-001", "code-davinci-edit-001")
-
-  require(validModels.contains(model), s"Invalid model: $model")
-
-  require(
-    temperature.fold(true)(temp => temp >= 0 && temp <= 2),
-    "temperature must be between 0 and 1"
-  )
-}
+) extends OpenAiRequest
 
 object CreateEditRequest {
   implicit val encoder: Encoder[CreateEditRequest] = deriveEncoder(
