@@ -4,7 +4,11 @@ import openai.Utilities.getHeaders
 import openai.{BaseUrl, OpenAiConfig}
 import openai.http.{OpenAiHttpClient, RequestMethod}
 import openai.http.OpenAiHttpClient.executeMultipartRequest
-import openai.module.audio.domain.{AudioResponse, CreateTranscriptionRequest, CreateTranslationRequest}
+import openai.module.audio.domain.{
+  AudioResponse,
+  CreateTranscriptionRequest,
+  CreateTranslationRequest
+}
 
 import scala.concurrent.{ExecutionContext, Future}
 
