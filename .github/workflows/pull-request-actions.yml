@@ -65,8 +65,6 @@ jobs:
     name: Integration Test
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      OPENAI_API_KEY: ${{ env.OPENAI_API_KEY }}
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 11
@@ -76,3 +74,5 @@ jobs:
           distribution: 'temurin'
       - name: Integration Test
         run: sbt +it:test
+        env:
+          OPENAI_API_KEY: ${{ env.OPENAI_API_KEY }}
