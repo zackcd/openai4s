@@ -1,0 +1,73 @@
+name: Pull Request Actions
+
+on:
+  push:
+    branches: [ "**", "!master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+      - name: ScalaFmt Check
+        continue-on-error: false
+        run: sbt +scalafmtCheck
+
+  build:
+    needs: format
+    name: Build Scala Project
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+      - name: Build
+        run: sbt -v +compile
+
+  unit-test:
+    needs: build
+    name: Unit Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+      - name: Test
+        run: sbt test
+
+  integration-test:
+    needs: build
+    name: Integration Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+      - name: Integration Test
+        run: sbt +it:test

@@ -4,12 +4,15 @@ ThisBuild / version := "0.1.0-SNAPSHOT"
 
 ThisBuild / scalaVersion := "2.13.10"
 
+ThisBuild / licenses += "MIT" -> url("https://opensource.org/licenses/MIT")
+
 lazy val root = (project in file("."))
   .settings(
     name := "openai4s",
     scalacOptions := scalacOps
   )
 
+publishMavenStyle := true
 publishTo := {
   val nexus = "https://oss.sonatype.org/"
   if (isSnapshot.value)
