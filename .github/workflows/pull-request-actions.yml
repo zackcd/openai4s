@@ -73,6 +73,6 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
       - name: Integration Test
-        run: sbt it:test
         env:
           OPENAI_API_KEY: ${{ env.OPENAI_API_KEY }}
+        run: sbt it:test

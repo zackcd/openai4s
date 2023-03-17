@@ -1,4 +1,4 @@
-package openai.edit
+package openai.module.edit
 
 import munit.FunSuite
 import openai.{TestClient, TestLogger}

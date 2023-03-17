@@ -1,4 +1,4 @@
-package openai.model
+package openai.module.model
 
 import munit.FunSuite
 import openai.{TestClient, TestLogger}

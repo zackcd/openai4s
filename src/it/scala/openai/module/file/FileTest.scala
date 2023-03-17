@@ -1,4 +1,4 @@
-package openai.file
+package openai.module.file
 
 import munit.FunSuite
 import openai.{TestClient, TestLogger}
@@ -23,7 +23,7 @@ class FileTest extends FunSuite with TestClient with TestLogger {
   test("upload file") {
     val request = UploadFileRequest(
       purpose = "fine-tune",
-      file = new File("src/test/resources/test.jsonl")
+      file = new File("src/it/resources/test.jsonl")
     )
 
     val futureResponse = testClient.file.upload(request)
@@ -40,7 +40,7 @@ class FileTest extends FunSuite with TestClient with TestLogger {
   test("upload, retrieve metadata, then delete file") {
     val uploadRequest = UploadFileRequest(
       purpose = "fine-tune",
-      file = new File("src/test/resources/test.jsonl")
+      file = new File("src/it/resources/test.jsonl")
     )
     testClient.file.upload(uploadRequest).map { uploadResponse =>
       logger.info(s"Upload response: $uploadResponse")
@@ -63,7 +63,7 @@ class FileTest extends FunSuite with TestClient with TestLogger {
   test("upload, retrieve content, then delete file") {
     val uploadRequest = UploadFileRequest(
       purpose = "fine-tune",
-      file = new File("src/test/resources/test.jsonl")
+      file = new File("src/it/resources/test.jsonl")
     )
     testClient.file.upload(uploadRequest).map { uploadResponse =>
       logger.info(s"Upload response: $uploadResponse")

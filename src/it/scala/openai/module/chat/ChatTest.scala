@@ -1,4 +1,4 @@
-package openai.chat
+package openai.module.chat
 
 import munit.FunSuite
 import openai.{TestClient, TestLogger}

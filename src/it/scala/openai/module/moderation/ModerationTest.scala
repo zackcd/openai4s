@@ -1,4 +1,4 @@
-package openai.moderation
+package openai.module.moderation
 
 import munit.FunSuite
 import openai.{TestClient, TestLogger}

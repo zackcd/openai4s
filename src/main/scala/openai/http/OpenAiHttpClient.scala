@@ -120,7 +120,7 @@ object OpenAiHttpClient {
           .body(b.asJson.deepDropNullValues.noSpaces)
           .contentType(MediaType.ApplicationJson)
       case None => basicRequest
-    }).headers(headers)
+    }).headers(headers ++ Map("Content-Type" -> "application/json"))
       .response(
         asString.getRight
       )
@@ -150,6 +150,7 @@ object OpenAiHttpClient {
       value match {
         case RequestPart.FilePart(p)   => multipartFile(key, p)
         case RequestPart.StringPart(p) => multipart(key, p)
+        case RequestPart.IntPart(p) => multipart(key, p.toString)
         case RequestPart.DoublePart(p) => multipart(key, p.toString)
       }
     }.toList
@@ -157,7 +158,7 @@ object OpenAiHttpClient {
     val request = basicRequest
       .multipartBody(parts)
       .contentType(MediaType.MultipartFormData)
-      .headers(headers)
+      .headers(headers ++ Map("Content-Type" -> "multipart/form-data"))
       .response(
         asString.getRight
       )

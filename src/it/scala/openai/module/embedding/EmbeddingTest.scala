@@ -1,4 +1,4 @@
-package openai.embedding
+package openai.module.embedding
 
 import munit.FunSuite
 import openai.{TestClient, TestLogger}

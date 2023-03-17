@@ -1,4 +1,4 @@
-package openai.completion
+package openai.module.completion
 
 import munit.FunSuite
 import openai.{TestClient, TestLogger}
