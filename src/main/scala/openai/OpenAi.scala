@@ -50,10 +50,9 @@ object OpenAi {
   def apply()(implicit ec: ExecutionContext): OpenAi = {
     Try(
       sys.env("OPENAI_API_KEY"),
-      sys.env.get("OPENAI_ORGANIZATION"),
-      sys.env("OPENAI_MODE")
-    ).map { case (apiKey, organization, mode) =>
-      val config = OpenAiConfig(apiKey, organization, mode)
+      sys.env.get("OPENAI_ORGANIZATION")
+    ).map { case (apiKey, organization) =>
+      val config = OpenAiConfig(apiKey, organization)
       new OpenAi(config)
     }.getOrElse(throw new Exception("Missing environment variables"))
   }

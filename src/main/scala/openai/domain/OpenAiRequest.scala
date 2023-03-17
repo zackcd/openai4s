@@ -17,8 +17,6 @@ object OpenAiRequest {
     case r: CreateEditRequest           => r.asJson
     case r: CreateEmbeddingRequest      => r.asJson
     case r: CreateImageRequest          => r.asJson
-    case r: CreateImageEditRequest      => r.asJson
-    case r: CreateImageVariationRequest => r.asJson
     case r: CreateModerationRequest     => r.asJson
     case r: CreateChatCompletionRequest => r.asJson
   }

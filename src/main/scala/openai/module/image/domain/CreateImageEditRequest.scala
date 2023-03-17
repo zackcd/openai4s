@@ -3,11 +3,16 @@ package openai.module.image.domain
 import io.circe.{Encoder, derivation}
 import io.circe.derivation.deriveEncoder
 import openai.domain.OpenAiRequest
+import openai.http.RequestPart
+import openai.http.RequestPart.{FilePart, IntPart, StringPart}
 
 import java.io.File
 
 /** @see
   *   https://platform.openai.com/docs/api-reference/images/create-edit
+  * @param image
+  *   The image to use as the basis for the variation(s). Must be a valid PNG
+  *   file, less than 4MB, and square.
   * @param mask
   *   An additional image whose fully transparent areas (e.g. where alpha is
   *   zero) indicate where image should be edited. Must be a valid PNG file,
@@ -28,16 +33,23 @@ import java.io.File
   *   monitor and detect abuse.
   */
 final case class CreateImageEditRequest(
-    mask: Option[String],
+    image: File,
     prompt: String,
+    mask: Option[String] = None,
     n: Option[Int] = None,
     size: Option[ImageSize] = None,
     responseFormat: Option[ImageResponseFormat] = None,
     user: Option[String] = None
-) extends OpenAiRequest
-
-object CreateImageEditRequest {
-  implicit val encoder: Encoder[CreateImageEditRequest] = deriveEncoder(
-    derivation.renaming.snakeCase
-  )
+) extends OpenAiRequest {
+  def toMultipartMap: Map[String, RequestPart] = Map(
+    "image" -> FilePart(image),
+    "prompt" -> StringPart(prompt)
+  ) ++
+    this.mask.map("mask" -> StringPart(_)).toMap ++
+    this.n.map("n" -> IntPart(_)).toMap ++
+    this.size.map(s => "size" -> StringPart(s.value)).toMap ++
+    this.responseFormat
+      .map(rf => "response_format" -> StringPart(rf.value))
+      .toMap ++
+    this.user.map("user" -> StringPart(_)).toMap
 }

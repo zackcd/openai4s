@@ -15,7 +15,8 @@ import openai.domain.OpenAiRequest
   *   text-moderation-stable may be slightly lower than for
   *   text-moderation-latest.
   */
-case class CreateModerationRequest(input: String, model: Option[String] = None) extends OpenAiRequest
+case class CreateModerationRequest(input: String, model: Option[String] = None)
+    extends OpenAiRequest
 
 object CreateModerationRequest {
   implicit val encoder: Encoder[CreateModerationRequest] = deriveEncoder(
