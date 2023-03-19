@@ -8,7 +8,7 @@ language model and other AI-powered tools using Scala.
 To use this library, add the following dependency to your SBT build file:
 
 ```scala
-libraryDependencies += "" %% "openai4s" % "0.1.0"
+libraryDependencies += "io.github.zackcd" %% "openai4s" % "0.1.0"
 ```
 
 ## Usage
@@ -34,13 +34,12 @@ You can then use the library to interact with the OpenAI API. For example, to ge
 model, you can use the following code:
 
 ```scala
-val prompt = Prompt(
-  engine = "davinci",
-  prompt = "Once upon a time",
-  maxTokens = 5
+val request = CreateCompletionRequest(
+  model = "text-davinci-003",
+  prompt = Some("This is a test prompt")
 )
 
-val response = openai.completions.create(prompt)
+val response = openai.completion.create(request)
 
 println(response.choices(0).text)
 ```

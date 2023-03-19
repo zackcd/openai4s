@@ -1,12 +1,24 @@
 import CompilerOps._
 
 ThisBuild / name := "openai4s"
-
-ThisBuild / version := "0.1.0-SNAPSHOT"
-
 ThisBuild / scalaVersion := "2.13.10"
 
-ThisBuild / licenses += "MIT" -> url("https://opensource.org/licenses/MIT")
+ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
+sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
+
+inThisBuild(List(
+  organization := "com.github.zackcd",
+  homepage := Some(url("https://github.com/zackcd/openai4s")),
+  licenses := List("MIT" -> url("https://opensource.org/licenses/MIT")),
+  developers := List(
+    Developer(
+      "zackcd",
+      "Zack Downing",
+      "zack_downing@mac.com",
+      url("https://githun.com/zackcd")
+    )
+  )
+))
 
 lazy val integrationTestSettings = Seq(
   IntegrationTest / parallelExecution := false,
@@ -25,22 +37,6 @@ lazy val root = (project in file("."))
     name := "openai4s",
     scalacOptions := scalacOps
   )
-
-publishMavenStyle := true
-publishTo := {
-  val nexus = "https://oss.sonatype.org/"
-  if (isSnapshot.value)
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases" at nexus + "service/local/staging/deploy/maven2")
-}
-
-credentials += Credentials(
-  "Sonatype Nexus Repository Manager",
-  "oss.sonatype.org",
-  sys.env.getOrElse("SONATYPE_USERNAME", ""),
-  sys.env.getOrElse("SONATYPE_PASSWORD", "")
-)
 
 libraryDependencies ++= {
   val circeVersion = "0.15.0-M1"
