@@ -15,7 +15,6 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
-#      - uses: olafurpg/setup-scala@v14
       - run: sbt ci-release
         env:
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}

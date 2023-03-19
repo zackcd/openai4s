@@ -6,14 +6,8 @@ ThisBuild / scalaVersion := "2.13.10"
 ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
 sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
 
-resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases"),
-  Resolver.sonatypeRepo("snapshots"),
-  "Maven Central" at "https://repo1.maven.org/maven2/"
-)
-
 inThisBuild(List(
-  organization := "com.github.zackcd",
+  organization := "io.github.zackcd",
   homepage := Some(url("https://github.com/zackcd/openai4s")),
   licenses := List("MIT" -> url("https://opensource.org/licenses/MIT")),
   developers := List(
