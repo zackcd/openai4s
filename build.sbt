@@ -2,7 +2,7 @@ import CompilerOps._
 
 ThisBuild / name := "openai4s"
 ThisBuild / scalaVersion := "2.13.10"
-ThisBuild / javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
+//ThisBuild / javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 
 ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
 sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
@@ -54,14 +54,6 @@ libraryDependencies ++= {
       "com.softwaremill.sttp.client3" %% "core" % "3.8.12"
     )
 }
-
-libraryDependencies ++= Seq(
-  "org.scala-lang.modules" %% "scala-java8-compat" % "0.9.1",
-  "org.scala-lang.modules" %% "scala-xml" % "2.0.1",
-  "org.apache.httpcomponents" % "httpclient" % "4.5.13",
-  "org.apache.httpcomponents" % "httpcore" % "4.4.14"
-)
-
 
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.10"
 libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4"
