@@ -2,10 +2,15 @@ import CompilerOps._
 
 ThisBuild / name := "openai4s"
 ThisBuild / scalaVersion := "2.13.10"
-//ThisBuild / javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 
 ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
 sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
+
+resolvers ++= Seq(
+  Resolver.sonatypeRepo("releases"),
+  Resolver.sonatypeRepo("snapshots"),
+  "Maven Central" at "https://repo1.maven.org/maven2/"
+)
 
 inThisBuild(List(
   organization := "com.github.zackcd",
