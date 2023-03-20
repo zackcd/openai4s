@@ -1,6 +1,6 @@
 # openai4s - OpenAI API Scala Client Library
 
-This is an open source client library for the OpenAI API, which allows developers to easily interact with the OpenAI GPT
+This is an unofficial, open source client library for the OpenAI API, which allows developers to easily interact with the OpenAI GPT
 language model and other AI-powered tools using Scala.
 
 ## Installation
