@@ -19,8 +19,6 @@ import scala.concurrent.{ExecutionContext, Future}
   */
 sealed trait ChatClient {
 
-  val ResourcePath = "/v1/chat"
-
   /** Creates a completion for the chat message
     * @see
     *   https://platform.openai.com/docs/api-reference/chat/create
@@ -36,6 +34,8 @@ sealed trait ChatClient {
 }
 
 object ChatClient {
+
+  private val ResourcePath = "/v1/chat"
 
   def apply(
       config: OpenAiConfig,

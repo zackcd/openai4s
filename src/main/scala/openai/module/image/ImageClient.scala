@@ -2,7 +2,7 @@ package openai.module.image
 
 import cats.syntax.all._
 import openai.Utilities.getHeaders
-import openai.{BaseUrl, OpenAiClient, OpenAiConfig}
+import openai.{BaseUrl, OpenAiConfig}
 import openai.http.{OpenAiHttpClient, RequestMethod}
 import openai.http.OpenAiHttpClient.{executeMultipartRequest, executeRequest}
 import openai.module.image.domain._
@@ -14,9 +14,7 @@ import scala.concurrent.{ExecutionContext, Future}
   * @see
   *   https://platform.openai.com/docs/api-reference/images
   */
-sealed trait ImageClient extends OpenAiClient {
-
-  val ResourcePath = "/v1/images"
+sealed trait ImageClient {
 
   /** Creates an image given a prompt.
     * @see
@@ -51,6 +49,8 @@ sealed trait ImageClient extends OpenAiClient {
 }
 
 object ImageClient {
+
+  private val ResourcePath = "/v1/images"
 
   def apply(config: OpenAiConfig, client: OpenAiHttpClient)(implicit
       ec: ExecutionContext

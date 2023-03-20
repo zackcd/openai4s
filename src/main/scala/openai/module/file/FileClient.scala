@@ -8,7 +8,7 @@ import openai.http.OpenAiHttpClient.{
   executeRequest
 }
 import openai.http.RequestPart.{FilePart, StringPart}
-import openai.{BaseUrl, OpenAiClient, OpenAiConfig}
+import openai.{BaseUrl, OpenAiConfig}
 import openai.module.file.domain._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -18,9 +18,7 @@ import scala.concurrent.{ExecutionContext, Future}
   * @see
   *   https://platform.openai.com/docs/api-reference/files
   */
-sealed trait FileClient extends OpenAiClient {
-
-  val ResourcePath = "/v1/files"
+sealed trait FileClient {
 
   /** Returns a list of files that belong to the user's organization.
     * @see
@@ -76,6 +74,8 @@ sealed trait FileClient extends OpenAiClient {
 }
 
 object FileClient {
+
+  private val ResourcePath = "/v1/files"
 
   def apply(config: OpenAiConfig, client: OpenAiHttpClient)(implicit
       ec: ExecutionContext

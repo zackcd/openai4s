@@ -2,7 +2,7 @@ package openai.module.edit
 
 import cats.syntax.all._
 import openai.Utilities.getHeaders
-import openai.{BaseUrl, OpenAiClient, OpenAiConfig}
+import openai.{BaseUrl, OpenAiConfig}
 import openai.module.edit.domain.{CreateEditRequest, Edit}
 import openai.http.{OpenAiHttpClient, RequestMethod}
 import openai.http.OpenAiHttpClient.executeRequest
@@ -14,9 +14,7 @@ import scala.concurrent.{ExecutionContext, Future}
   * @see
   *   https://platform.openai.com/docs/api-reference/edits
   */
-sealed trait EditClient extends OpenAiClient {
-
-  val ResourcePath = "/v1/edits"
+sealed trait EditClient {
 
   /** Creates a new edit for the provided input, instruction, and parameters.
     * @see
@@ -31,6 +29,8 @@ sealed trait EditClient extends OpenAiClient {
 }
 
 object EditClient {
+
+  private val ResourcePath = "/v1/edits"
 
   def apply(config: OpenAiConfig, client: OpenAiHttpClient)(implicit
       ec: ExecutionContext

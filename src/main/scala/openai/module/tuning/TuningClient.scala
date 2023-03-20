@@ -21,8 +21,6 @@ import scala.concurrent.{ExecutionContext, Future}
   */
 trait TuningClient {
 
-  val ResourcePath = "/v1/fine-tunes"
-
   /** Creates a job that fine-tunes a specified model from a given dataset.
     * Response includes details of the enqueued job including job status and the
     * name of the fine-tuned models once complete.
@@ -89,6 +87,8 @@ trait TuningClient {
 }
 
 object TuningClient {
+
+  private val ResourcePath = "/v1/fine-tunes"
 
   def apply(config: OpenAiConfig, client: OpenAiHttpClient)(implicit
       ec: ExecutionContext

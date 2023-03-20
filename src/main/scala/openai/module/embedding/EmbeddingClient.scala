@@ -2,7 +2,7 @@ package openai.module.embedding
 
 import cats.syntax.all._
 import openai.Utilities.getHeaders
-import openai.{BaseUrl, OpenAiClient, OpenAiConfig}
+import openai.{BaseUrl, OpenAiConfig}
 import openai.module.embedding.domain.{CreateEmbeddingRequest, Embedding}
 import openai.http.{OpenAiHttpClient, RequestMethod}
 import openai.http.OpenAiHttpClient.executeRequest
@@ -14,9 +14,7 @@ import scala.concurrent.{ExecutionContext, Future}
   * @see
   *   https://platform.openai.com/docs/api-reference/embeddings
   */
-sealed trait EmbeddingClient extends OpenAiClient {
-
-  val ResourcePath = "/v1/embeddings"
+sealed trait EmbeddingClient {
 
   /** Creates an embedding vector representing the input text.
     * @see
@@ -30,6 +28,8 @@ sealed trait EmbeddingClient extends OpenAiClient {
 }
 
 object EmbeddingClient {
+
+  private val ResourcePath = "/v1/embeddings"
 
   def apply(config: OpenAiConfig, client: OpenAiHttpClient)(implicit
       ec: ExecutionContext
