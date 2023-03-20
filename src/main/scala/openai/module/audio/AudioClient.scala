@@ -33,7 +33,8 @@ sealed trait AudioClient {
   /** Translates audio into into English.
     * @see
     *   https://platform.openai.com/docs/api-reference/audio/create
-    * @param request The data to use for this request
+    * @param request
+    *   The data to use for this request
     * @return
     */
   def createTranslation(
