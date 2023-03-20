@@ -18,8 +18,6 @@ import scala.concurrent.{ExecutionContext, Future}
   */
 sealed trait AudioClient {
 
-  val ResourcePath = "/v1/audio"
-
   /** Transcribes audio into the input language.
     * @see
     *   https://platform.openai.com/docs/api-reference/audio/create
@@ -36,6 +34,7 @@ sealed trait AudioClient {
     * @see
     *   https://platform.openai.com/docs/api-reference/audio/create
     * @param request
+    *   The data to use for this request
     * @return
     */
   def createTranslation(
@@ -44,6 +43,8 @@ sealed trait AudioClient {
 }
 
 object AudioClient {
+
+  private val ResourcePath = "/v1/audio"
 
   def apply(config: OpenAiConfig, client: OpenAiHttpClient)(implicit
       ec: ExecutionContext

@@ -16,8 +16,6 @@ import scala.concurrent.{ExecutionContext, Future}
   */
 sealed trait ModelClient {
 
-  val ResourcePath = "/v1/models"
-
   /** Lists the currently available models, and provides basic information about
     * each one such as the owner and availability.
     * @see
@@ -40,6 +38,9 @@ sealed trait ModelClient {
 }
 
 object ModelClient {
+
+  private val ResourcePath = "/v1/models"
+
   def apply(
       config: OpenAiConfig,
       client: OpenAiHttpClient

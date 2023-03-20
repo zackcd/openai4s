@@ -2,7 +2,7 @@ package openai.module.completion
 
 import cats.syntax.all._
 import openai.Utilities.getHeaders
-import openai.{BaseUrl, OpenAiClient, OpenAiConfig}
+import openai.{BaseUrl, OpenAiConfig}
 import openai.module.completion.domain._
 import openai.http.OpenAiHttpClient.executeRequest
 import openai.http.{OpenAiHttpClient, RequestMethod}
@@ -14,9 +14,7 @@ import scala.concurrent.{ExecutionContext, Future}
   * @see
   *   https://platform.openai.com/docs/api-reference/completions
   */
-sealed trait CompletionClient extends OpenAiClient {
-
-  val ResourcePath = "/v1/completions"
+sealed trait CompletionClient {
 
   /** Creates a completion for the provided prompt and parameters
     * @see
@@ -33,6 +31,8 @@ sealed trait CompletionClient extends OpenAiClient {
 }
 
 object CompletionClient {
+
+  private val ResourcePath = "/v1/completions"
 
   def apply(
       config: OpenAiConfig,

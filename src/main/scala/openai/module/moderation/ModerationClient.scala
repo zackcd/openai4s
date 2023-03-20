@@ -2,7 +2,7 @@ package openai.module.moderation
 
 import cats.syntax.all._
 import openai.Utilities.getHeaders
-import openai.{BaseUrl, OpenAiClient, OpenAiConfig}
+import openai.{BaseUrl, OpenAiConfig}
 import openai.http.{OpenAiHttpClient, RequestMethod}
 import openai.http.OpenAiHttpClient.executeRequest
 import openai.module.moderation.domain.{
@@ -17,9 +17,7 @@ import scala.concurrent.{ExecutionContext, Future}
   * @see
   *   https://platform.openai.com/docs/api-reference/moderations
   */
-sealed trait ModerationClient extends OpenAiClient {
-
-  val ResourcePath = "/v1/moderations"
+sealed trait ModerationClient {
 
   /** Classifies if text violates OpenAI's Content Policy
     * @see
@@ -34,6 +32,8 @@ sealed trait ModerationClient extends OpenAiClient {
 }
 
 object ModerationClient {
+
+  private val ResourcePath = "/v1/moderations"
 
   def apply(config: OpenAiConfig, client: OpenAiHttpClient)(implicit
       ec: ExecutionContext
